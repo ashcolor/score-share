@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ScoreController::class, 'index'])->name('home');
-Route::resource('score', 'ScoreController');
+Route::get('{any}', function () {
+    return view('index');
+})->where('any', '.*');
+
+//Route::get('/', [ScoreController::class, 'index'])->name('home');
+//Route::resource('score', 'ScoreController');
