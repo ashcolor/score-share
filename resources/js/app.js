@@ -13,12 +13,18 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 import Vue from 'vue'
 import router from "./router";
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
+Vue.use(
+    BootstrapVue,
+    IconsPlugin,
+    axios,
+    VueAxios
+);
 
 const app = new Vue({
     el: '#app',

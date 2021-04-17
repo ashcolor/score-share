@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::prefix('api/v1')->group(function () {
+    Route::resources([
+        'scores' => ScoreController::class,
+    ]);
+});
+
 Route::get('{any}', function () {
     return view('index');
 })->where('any', '.*');
 
-//Route::get('/', [ScoreController::class, 'index'])->name('home');
-//Route::resource('score', 'ScoreController');
+

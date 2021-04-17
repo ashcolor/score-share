@@ -10,10 +10,8 @@ class ScoreController extends Controller
 
     public function index()
     {
-        $scores = Score::all();
-        return view('score.index', [
-            'scores' => $scores
-        ]);
+        $scores = Score::paginate(10);
+        return response($scores);
     }
 
     /**
