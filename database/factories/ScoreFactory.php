@@ -26,10 +26,10 @@ class ScoreFactory extends Factory
             'title' => $this->faker->word,
             'artist' => $this->faker->firstName,
             'score_created_by' => User::factory()->create()->id,
-            'score_created_at' => $this->faker->dateTime,
-            'score_modified_at' => $this->faker->dateTime,
-            'genre' => $this->faker->text(10),
-            'remarks' => $this->faker->text,
+            'score_created_at' => $this->faker->date,
+            'score_modified_at' => $this->faker->date,
+            'genre' => $this->faker->word,
+            'remarks' => $this->faker->text(100),
             'url' => $this->faker->url,
         ];
     }
