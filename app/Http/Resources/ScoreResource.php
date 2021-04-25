@@ -28,7 +28,7 @@ class ScoreResource extends JsonResource
             'score_created_user' => $this->score_created_user,
             //ログインユーザのIDを付与する
             'is_own' => sizeof($this->ownerships->where('id', 1)) !== 0,
-            'is_want' => sizeof($this->wants) !== 0,
+            'is_want' => sizeof($this->wants->where('id', 1)) !== 0,
         ];
     }
 }

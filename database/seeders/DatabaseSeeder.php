@@ -24,10 +24,10 @@ class DatabaseSeeder extends Seeder
             ->create()
             ->each(function ($score) use ($users) {
                 $score->ownerships()->attach(
-                    $users->random(rand(0,3))->pluck('id')->toArray()
+                    $users->random(rand(0,10))->pluck('id')->toArray()
                 );
                 $score->wants()->attach(
-                    $users->random(rand(0,3))->pluck('id')->toArray()
+                    $users->random(rand(0,10))->pluck('id')->toArray()
                 );
             });
     }
