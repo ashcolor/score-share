@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ScoreResource;
 use App\Models\Score;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ScoreController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $scores = Score::paginate(10);
+        $searchSelected = $request->input('searchSelected');
+        $search = $request->input('search');
+
+        $query = Score::query();
+
+        if ($search) {
+            $query->where($searchSelected, 'like', "%$search%");
+        }
+
+        $scores = $query->paginate(25);
+        ScoreResource::collection($scores);
         return response($scores);
     }
 

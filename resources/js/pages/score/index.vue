@@ -1,9 +1,23 @@
 <template>
     <div>
         <custom-header></custom-header>
-        <div class="container">
-            <b-table striped hover :items="items"></b-table>
-        </div>
+        <b-container class="my-4">
+            <b-card no-body>
+                <div>
+                    <b-tabs card active-nav-item-class="bg-primary text-white">
+                        <b-tab title="全楽曲" active>
+                            <score-table-all></score-table-all>
+                        </b-tab>
+                        <b-tab title="自作楽曲">
+
+                        </b-tab>
+                        <b-tab title="欲しい楽曲">
+
+                        </b-tab>
+                    </b-tabs>
+                </div>
+            </b-card>
+        </b-container>
     </div>
 </template>
 
@@ -11,38 +25,24 @@
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import CustomHeader from "../../components/Header";
+import ScoreTableAll from "../../components/ScoreTableAll";
 
 export default {
     components: {
         axios,
         VueAxios,
-        CustomHeader},
-    data() {
-        return {
-            items: [
-                { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-                { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-                { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-                { age: 38, first_name: 'Jami', last_name: 'Carney' }
-            ]
-        }
+        CustomHeader,
+        ScoreTableAll
     },
+    data() {
+        return {}
+    },
+    computed: {},
     created() {
-        this.getScores()
     },
     mounted() {
     },
 
-    methods: {
-        getScores() {
-            axios.get('/api/v1/scores')
-                .then((response) => {
-                    this.items = response.data.data
-                })
-                .catch((e) => {
-                    alert(e);
-                });
-        }
-    }
+    methods: {}
 }
 </script>

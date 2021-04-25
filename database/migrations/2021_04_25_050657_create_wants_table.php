@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateWantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-//        if (!Schema::hasTable('users')) {
-            Schema::create('users', function (Blueprint $table) {
+//        if (!Schema::hasTable('wants')) {
+            Schema::create('wants', function (Blueprint $table) {
                 $table->id();
-                $table->string('name');
-                $table->string('email')->unique();
-                $table->timestamp('email_verified_at')->nullable();
-                $table->string('password');
-                $table->rememberToken();
                 $table->timestamps();
+                $table->integer('user_id')->nullable()->comment('ユーザID');
+                $table->integer('score_id')->nullable()->comment('楽曲ID');
             });
 //        }
     }
@@ -33,6 +30,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('wants');
     }
 }

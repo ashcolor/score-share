@@ -23,14 +23,16 @@ class ScoreFactory extends Factory
     public function definition()
     {
         return [
+            'created_at' => $this->faker->date,
+            'updated_at' => $this->faker->date,
             'title' => $this->faker->word,
-            'artist' => $this->faker->firstName,
-            'score_created_by' => User::factory()->create()->id,
-            'score_created_at' => $this->faker->date,
-            'score_modified_at' => $this->faker->date,
+            'artist' => $this->faker->optional(0.8)->firstName,
+            'score_created_by' => $this->faker->numberBetween(1, 30),
+            'score_created_at' => $this->faker->optional(0.8)->date,
+            'score_updated_at' => $this->faker->optional(0.8)->date,
             'genre' => $this->faker->word,
-            'remarks' => $this->faker->text(100),
-            'url' => $this->faker->url,
+            'remarks' => $this->faker->optional(0.8)->realText(100),
+            'url' => $this->faker->optional(0.2)->url,
         ];
     }
 }
