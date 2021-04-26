@@ -17,6 +17,10 @@ class CreateUsersTable extends Migration
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
+                $table->string('twitter_id');
+                $table->string('twitter_name');
+                $table->string('twitter_screen_name');
+                $table->string('twitter_profile_image_url_https');
                 $table->string('email')->unique();
                 $table->timestamp('email_verified_at')->nullable();
                 $table->string('password');

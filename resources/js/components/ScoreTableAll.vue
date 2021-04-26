@@ -2,10 +2,19 @@
     <div>
         <b-row>
             <b-col class="my-1">
+
+                <b-form-group>
+                    <b-form-checkbox-group
+                        v-model="selected"
+                        :options="options"
+                        switches
+                    ></b-form-checkbox-group>
+                </b-form-group>
+
                 <b-input-group class="mx-auto">
 
                     <b-input-group-prepend>
-                        <b-form-select v-model="searchSelected" :options="options"></b-form-select>
+                        <b-form-select v-model="searchSelected" :options="searchOptions"></b-form-select>
                     </b-input-group-prepend>
 
                     <b-form-input v-if="['title','artist','genre'].includes(searchSelected)"
@@ -21,13 +30,37 @@
             </b-col>
         </b-row>
 
-        <b-table small hover outlined :fields="fields" :items="scores.data" class="mt-3">
-            <template #cell(remarks)="data">
-                {{ data.value.length <= 20 ? data.value : (data.value.substr(0, 20) + "...") }}
+        <b-table small hover outlined :fields="fields" :items="scores.data" :tbody-tr-class="rowClass" class="mt-3">
+            <template #cell(genre)="data">
+                <span class="badge badge-light">{{ data.value }}</span>
+            </template>
+            <template #cell(score_created_user)="data">
+                <b-avatar size="sm" :src="data.item.score_created_user.twitter_profile_image_url_https"
+                          class="m-0"></b-avatar>
+                <small>
+                    {{ data.item.score_created_user.twitter_screen_name }}
+                    <span class="text-muted">@{{ data.item.score_created_user.twitter_name }}</span>
+                </small>
+            </template>
+            <template #cell(score_date)="data">
+                <p class="text-muted m-0"><small>作成:{{ data.item.score_created_at }}</small></p>
+                <p class="text-muted m-0"><small>更新:{{ data.item.score_created_at }}</small></p>
             </template>
             <template #cell(url)="data">
-                <a v-if="data.value" :href="data.value" target="_blank">
-                    <b-icon-volume-up-fill></b-icon-volume-up-fill>
+                <a v-if="data.value" :href="data.value" target="_blank" class="pa-2">
+                    <b-icon-headphones></b-icon-headphones>
+                </a>
+            </template>
+            <template #cell(is_want)="data">
+                <a target="_blank" class="pa-2">
+                    <b-icon-heart-fill v-if="data.value" color="red"></b-icon-heart-fill>
+                    <b-icon-heart v-else color="red"></b-icon-heart>
+                </a>
+            </template>
+            <template #cell(is_own)="data">
+                <a target="_blank" class="pa-2">
+                    <b-icon-bookmark-check-fill v-if="data.value" color=green></b-icon-bookmark-check-fill>
+                    <b-icon-bookmark-check v-else color=green></b-icon-bookmark-check>
                 </a>
             </template>
         </b-table>
@@ -59,24 +92,29 @@ export default {
     },
     data() {
         return {
+            selected: [], // Must be an array reference!
+            options: [
+                { text: '自作楽曲のみ', value: '' },
+                { text: '未所持のみ', value: '' },
+                { text: '欲しい！のみ', value: ''},
+            ],
             searchSelected: 'title',
             search: '',
-            options: [
+            searchOptions: [
                 {value: 'title', text: '曲名'},
                 {value: 'artist', text: 'アーティスト'},
                 {value: 'genre', text: 'ジャンル'},
                 {value: 'score_created_at', text: '作成日'},
             ],
             fields: [
-                {key: 'score_created_at', label: '作成日', sortable: true},
-                {key: 'score_updated_at', label: '最終更新日', sortable: true},
-                {key: 'title', label: '曲名'},
-                {key: 'artist', label: 'アーティスト'},
-                {key: 'genre', label: 'ジャンル'},
-                {key: 'remarks', label: '備考'},
-                {key: 'url', label: '試聴URL'},
-                {key: 'is_own', label: '所持'},
-                {key: 'is_want', label: '欲しい！'},
+                {key: 'title', label: '曲名', class: 'align-middle'},
+                {key: 'artist', label: 'アーティスト', class: 'align-middle'},
+                {key: 'genre', label: 'ジャンル', class: 'align-middle'},
+                {key: 'score_created_user', label: '作成者', class: 'align-middle'},
+                {key: 'score_date', label: '作成日/更新日'},
+                {key: 'url', label: '試聴', class: 'text-center align-middle'},
+                {key: 'is_want', label: '欲しい！', class: 'text-center align-middle'},
+                {key: 'is_own', label: '所持', class: 'text-center align-middle'},
             ],
             scores: [],
         }
@@ -110,7 +148,26 @@ export default {
         },
         pageChange(page) {
             this.getScores(page)
+        },
+        rowClass(item, type) {
+            if (item.is_own === true) {
+                return 'bg-own'
+            } else if (item.is_want === true) {
+                return 'bg-want'
+            } else {
+                return
+            }
         }
     }
 }
 </script>
+
+<style>
+.bg-want {
+    background-color: #ffffe0;
+}
+
+.bg-own {
+    background-color: #c0c0c0;
+}
+</style>
