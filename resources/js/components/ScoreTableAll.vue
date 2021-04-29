@@ -49,13 +49,13 @@
                     </a>
                 </template>
                 <template #cell(is_want)="data">
-                    <a target="_blank" class="pa-2">
+                    <a class="pa-2" @click="want(data.item.id)">
                         <b-icon-heart-fill v-if="data.value" color="red"></b-icon-heart-fill>
                         <b-icon-heart v-else color="red"></b-icon-heart>
                     </a>
                 </template>
                 <template #cell(is_own)="data">
-                    <a target="_blank" class="pa-2">
+                    <a class="pa-2">
                         <b-icon-bookmark-check-fill v-if="data.value" color=green></b-icon-bookmark-check-fill>
                         <b-icon-bookmark-check v-else color=green></b-icon-bookmark-check>
                     </a>
@@ -131,6 +131,20 @@ export default {
             })
                 .then((response) => {
                     this.scores = response.data
+                    console.log(response.data)
+                })
+                .catch((e) => {
+                    alert(e);
+                });
+        },
+        want(id) {
+            const index = this.scores.data.findIndex(score => score.id === id)
+
+            this.scores.data[index].is_want = !this.scores.data[index].is_want
+            axios.post(`/api/v1/want`, {
+                'score_id': id
+            })
+                .then((response) => {
                     console.log(response.data)
                 })
                 .catch((e) => {

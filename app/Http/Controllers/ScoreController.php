@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ScoreResource;
 use App\Models\Score;
+use App\Models\Want;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,16 +25,6 @@ class ScoreController extends Controller
         $scores = $query->paginate(25);
         ScoreResource::collection($scores);
         return response($scores);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -91,4 +82,5 @@ class ScoreController extends Controller
     {
         //
     }
+
 }
