@@ -14,7 +14,7 @@
                 <b-navbar-nav class="ml-auto">
                     <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret right>
                         <template #button-content>
-                                <b-avatar class="mr-3"></b-avatar>
+                            <b-avatar class="mr-3"></b-avatar>
                         </template>
                         <b-dropdown-item href="#">ログイン</b-dropdown-item>
                         <b-dropdown-item href="#">設定</b-dropdown-item>
@@ -28,10 +28,11 @@
     </div>
 </template>
 
-<script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component
+export default class CustomHeader extends Vue {
+
+}
 </script>

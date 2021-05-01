@@ -77,91 +77,94 @@
     </div>
 </template>
 
-<script>
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+<script lang="ts">
+type Scores = {
+    data:{
+        id:number,
+        is_want:boolean,
+        is_own: boolean
+    }[],
+}
 
-export default {
-    components: {
-        axios,
-        VueAxios,
-    },
-    data() {
-        return {
-            isColor: true,
-            searchSelected: 'title',
-            search: '',
-            searchOptions: [
-                {value: 'title', text: '曲名'},
-                {value: 'artist', text: 'アーティスト'},
-                {value: 'genre', text: 'ジャンル'},
-                {value: 'score_created_at', text: '作成日'},
-            ],
-            fields: [
-                {key: 'title', label: '曲名', class: 'align-middle'},
-                {key: 'artist', label: 'アーティスト', class: 'align-middle'},
-                {key: 'genre', label: 'ジャンル', class: 'align-middle'},
-                {key: 'score_created_user', label: '作成者', class: 'align-middle'},
-                {key: 'score_date', label: '作成日/更新日'},
-                {key: 'url', label: '試聴', class: 'text-center align-middle'},
-                {key: 'is_want', label: '欲しい！', class: 'text-center align-middle'},
-                {key: 'is_own', label: '所持', class: 'text-center align-middle'},
-            ],
-            scores: [],
-        }
-    },
-    computed: {},
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component
+export default class ScoreTableAll extends Vue {
+    isColor:boolean = true;
+    searchSelected:string = 'title';
+    search:string = '';
+    searchOptions:Object[] =  [
+        { value: 'title', text: '曲名' },
+        { value: 'artist', text: 'アーティスト' },
+        { value: 'genre', text: 'ジャンル' },
+        { value: 'score_created_at', text: '作成日' },
+    ];
+    fields:Object[] = [
+        { key: 'title', label: '曲名', class: 'align-middle' },
+        { key: 'artist', label: 'アーティスト', class: 'align-middle' },
+        { key: 'genre', label: 'ジャンル', class: 'align-middle' },
+        { key: 'score_created_user', label: '作成者', class: 'align-middle' },
+        { key: 'score_date', label: '作成日/更新日' },
+        { key: 'url', label: '試聴', class: 'text-center align-middle' },
+        { key: 'is_want', label: '欲しい！', class: 'text-center align-middle' },
+        { key: 'is_own', label: '所持', class: 'text-center align-middle' },
+    ];
+    scores:Scores = {
+        data:[]
+    }
+
     created() {
         this.getScores()
-    },
+    };
+
     mounted() {
-    },
+    };
 
-    methods: {
-        execSearch() {
-            this.getScores(1)
-        },
-        getScores(page = 1, search = null) {
-            axios.get('/api/v1/scores', {
-                params: {
-                    searchSelected: this.searchSelected,
-                    search: this.search,
-                    page: page
-                }
-            })
-                .then((response) => {
-                    this.scores = response.data
-                    console.log(response.data)
-                })
-                .catch((e) => {
-                    alert(e);
-                });
-        },
-        want(id) {
-            const index = this.scores.data.findIndex(score => score.id === id)
+    execSearch() {
+        this.getScores(1)
+    };
 
-            this.scores.data[index].is_want = !this.scores.data[index].is_want
-            axios.post(`/api/v1/want`, {
-                'score_id': id
-            })
-                .then((response) => {
-                    console.log(response.data)
-                })
-                .catch((e) => {
-                    alert(e);
-                });
-        },
-        pageChange(page) {
-            this.getScores(page)
-        },
-        rowClass(item, type) {
-            if (item.is_own === true) {
-                return 'bg-own'
-            } else if (item.is_want === true) {
-                return 'bg-want'
-            } else {
-                return
+    getScores(page: number = 1, search?: String){
+        this.axios.get('/api/v1/scores', {
+            params: {
+                searchSelected: this.searchSelected,
+                search: this.search,
+                page: page,
             }
+        })
+            .then((response) => {
+                this.scores = response.data
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    };
+
+    want(id: number) {
+        const index = this.scores.data.findIndex(score => score.id === id)
+
+        this.scores.data[index].is_want = !this.scores.data[index].is_want
+        this.axios.post(`/api/v1/want`, {
+            'score_id': id
+        })
+            .then((response) => {
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    };
+
+    pageChange(page: number) {
+        this.getScores(page)
+    };
+
+    rowClass(item, type) {
+        if (item.is_own === true) {
+            return 'bg-own'
+        } else if (item.is_want === true) {
+            return 'bg-want'
+        } else {
+            return
         }
     }
 }
