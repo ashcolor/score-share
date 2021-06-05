@@ -3,6 +3,7 @@
         <CustomHeader></CustomHeader>
         <b-container class="my-4">
             <ScoreTableAll></ScoreTableAll>
+            <ScoreTableEach></ScoreTableEach>
         </b-container>
     </div>
 </template>
@@ -11,11 +12,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import CustomHeader from "../../components/CustomHeader.vue";
 import ScoreTableAll from "../../components/ScoreTableAll.vue";
+import ScoreTableEach from "../../components/ScoreTableEach.vue";
 
 @Component({
     components: {
         CustomHeader,
-        ScoreTableAll
+        ScoreTableAll,
+        ScoreTableEach
     },
 })
 

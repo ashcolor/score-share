@@ -9,6 +9,17 @@ class Score extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'artist',
+        'score_created_at',
+        'score_created_by',
+        'score_updated_at',
+        'genre',
+        'url',
+    ];
+
+
     public function score_created_user()
     {
         return $this->belongsTo(User::class, 'score_created_by');

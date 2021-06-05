@@ -7,8 +7,8 @@
 
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                    <b-nav-item href="#">楽譜検索</b-nav-item>
-                    <b-nav-item href="#">マイ楽譜</b-nav-item>
+                    <b-nav-item v-b-toggle.score-table-all>楽譜検索</b-nav-item>
+                    <b-nav-item v-b-toggle.score-table-each>マイ楽譜</b-nav-item>
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">
@@ -29,10 +29,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 
 @Component
 export default class CustomHeader extends Vue {
 
 }
 </script>
+
+<style scoped>
+.not-collapsed {
+
+    pointer-events: none;
+}
+.not-collapsed .nav-link {
+    color: #ffffff !important;
+}
+.collapsed {
+
+}
+</style>

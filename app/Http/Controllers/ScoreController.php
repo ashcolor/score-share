@@ -22,7 +22,7 @@ class ScoreController extends Controller
             $query->where($searchSelected, 'like', "%$search%");
         }
 
-        $scores = $query->paginate(25);
+        $scores = $query->orderBy('updated_at', 'DESC')->paginate(25);
         ScoreResource::collection($scores);
         return response($scores);
     }
@@ -35,7 +35,22 @@ class ScoreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $score = new Score();
+
+        $score->fill(
+            array_merge($request->input(), [
+                'score_created_by' => 1,
+            ])
+        )->save();
+
+        if ($score) {
+            return response(Score::query()->where('id', $score->id)->get(), 200);
+        } else {
+            return response([
+                'message' => 'save failed',
+                'code' => 404
+            ], 404);
+        }
     }
 
     /**

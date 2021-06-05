@@ -1,9 +1,9 @@
 <template>
     <div>
-        <b-collapse id="score-table-all" visible accordion="main-content">
+        <b-collapse id="score-table-each" accordion="main-content">
             <b-card header-tag="header" footer-tag="footer">
                 <template #header>
-                    <h4 class="mb-0">楽譜検索</h4>
+                    <h4 class="mb-0">マイページ</h4>
                 </template>
 
                 <b-input-group class="w-75 mx-auto">
@@ -21,15 +21,15 @@
                         <b-button size="sm" text="Button" variant="success" @click="execSearch">検索</b-button>
                     </b-input-group-append>
 
-                    <div class="custom-control custom-switch align-middle ml-4 my-auto">
-                        <input v-model="isColor" type="checkbox" class="custom-control-input" id="customSwitch1">
-                        <label class="custom-control-label" for="customSwitch1">色表示</label>
-                    </div>
-
                 </b-input-group>
 
-                <b-table small hover outlined :fields="fields" :items="scores.data" :tbody-tr-class="rowClass"
-                         class="mt-3">
+
+                <b-button v-b-modal.add-modal class="float-right">
+                    <b-icon icon="plus" aria-label="Help"></b-icon>
+                    新規追加
+                </b-button>
+
+                <b-table small hover outlined :fields="fields" :items="scores.data" class="mt-3">
                     <template #cell(genre)="data">
                         <span class="badge badge-light">{{ data.value }}</span>
                     </template>
@@ -43,27 +43,14 @@
                     </template>
                     <template #cell(score_date)="data">
                         <p class="text-muted m-0"><small>作成:{{ data.item.score_created_at }}</small></p>
-                        <p class="text-muted m-0"><small>更新:{{ data.item.score_created_at }}</small></p>
+                        <p class="text-muted m-0"><small>更新:{{ data.item.score_updated_at }}</small></p>
                     </template>
                     <template #cell(url)="data">
                         <a v-if="data.value" :href="data.value" target="_blank" class="pa-2">
                             <b-icon-headphones></b-icon-headphones>
                         </a>
                     </template>
-                    <template #cell(is_want)="data">
-                        <a class="pa-2" @click="want(data.item.id)">
-                            <b-icon-heart-fill v-if="data.value" color="red"></b-icon-heart-fill>
-                            <b-icon-heart v-else color="red"></b-icon-heart>
-                        </a>
-                    </template>
-                    <template #cell(is_own)="data">
-                        <a class="pa-2">
-                            <b-icon-bookmark-check-fill v-if="data.value" color=green></b-icon-bookmark-check-fill>
-                            <b-icon-bookmark-check v-else color=green></b-icon-bookmark-check>
-                        </a>
-                    </template>
                 </b-table>
-
 
                 <b-pagination
                     v-model="scores.current_page"
@@ -74,25 +61,36 @@
                     class="mt-3"
                 ></b-pagination>
 
-
             </b-card>
+
+            <ScoreAddModal @getScores="getScores"/>
+
         </b-collapse>
     </div>
 </template>
 
 <script lang="ts">
+import CustomHeader from "./CustomHeader.vue";
+
 type Scores = {
     data: {
         id: number,
-        is_want: boolean,
-        is_own: boolean
     }[],
+    current_page: number,
+    total: number,
+    per_page: number
 }
 
 import {Component, Vue} from 'vue-property-decorator';
+import ScoreAddModal from "../organisms/ScoreAddModal.vue";
 
-@Component
-export default class ScoreTableAll extends Vue {
+@Component({
+    components: {
+        ScoreAddModal
+    },
+})
+
+export default class ScoreTableEach extends Vue {
     isColor: boolean = true;
     searchSelected: string = 'title';
     search: string = '';
@@ -106,14 +104,14 @@ export default class ScoreTableAll extends Vue {
         {key: 'title', label: '曲名', class: 'align-middle'},
         {key: 'artist', label: 'アーティスト', class: 'align-middle'},
         {key: 'genre', label: 'ジャンル', class: 'align-middle'},
-        {key: 'score_created_user', label: '作成者', class: 'align-middle'},
         {key: 'score_date', label: '作成日/更新日'},
         {key: 'url', label: '試聴', class: 'text-center align-middle'},
-        {key: 'is_want', label: '欲しい！', class: 'text-center align-middle'},
-        {key: 'is_own', label: '所持', class: 'text-center align-middle'},
     ];
     scores: Scores = {
-        data: []
+        data: [],
+        current_page: 1,
+        total: 0,
+        per_page: 10
     }
 
     created() {
@@ -143,46 +141,19 @@ export default class ScoreTableAll extends Vue {
             });
     };
 
-    want(id: number) {
-        const index = this.scores.data.findIndex(score => score.id === id)
-
-        this.scores.data[index].is_want = !this.scores.data[index].is_want
-        this.axios.post(`/api/v1/want`, {
-            'score_id': id
-        })
-            .then((response) => {
-            })
-            .catch((e) => {
-                alert(e);
-            });
-    };
-
     pageChange(page: number) {
         this.getScores(page)
     };
 
-    rowClass(item, type) {
-        if (item.is_own === true) {
-            return 'bg-own'
-        } else if (item.is_want === true) {
-            return 'bg-want'
-        } else {
-            return
-        }
+    reloadPage() {
+        this.getScores(this.scores.current_page)
     }
 }
 </script>
 
 <style>
-#score-table-all {
+#score-table-each {
     animation: none;
     transition: none;
-}
-.bg-want {
-    background-color: #ffffe0;
-}
-
-.bg-own {
-    background-color: #c0c0c0;
 }
 </style>

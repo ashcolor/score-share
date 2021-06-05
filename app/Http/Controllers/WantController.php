@@ -19,8 +19,7 @@ class WantController extends Controller
         $want = new Want();
 
         $want->fill([
-            'score_id' => $request->input('score_id'
-            ),
+            'score_id' => $request->input('score_id'),
             'user_id' => 1,
         ])->save();
 
@@ -29,7 +28,7 @@ class WantController extends Controller
             return response(Want::query()->where('id', $want->id)->get(), 200);
         } else {
             return response([
-                'message' => 'failed',
+                'message' => 'save failed',
                 'code' => 404
             ], 404);
         }
