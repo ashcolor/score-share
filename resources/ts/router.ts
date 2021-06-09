@@ -9,6 +9,11 @@ const router = new VueRouter({
     mode: "history",
     routes: [
         {
+            path: "/",
+            name: "index",
+            component: ScoreIndex
+        },
+        {
             path: "/score",
             name: "index",
             component: ScoreIndex

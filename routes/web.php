@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/twitter/login', [App\Http\Controllers\Auth\TwitterController::class, 'login'])->name('twitter_login');
+Route::get('/twitter/callback', [App\Http\Controllers\Auth\TwitterController::class, 'callback'])->name('twitter_callback');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('{any}', function () {
