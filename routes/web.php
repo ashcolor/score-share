@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/twitter/login', [App\Http\Controllers\Auth\TwitterController::class, 'login'])->name('twitter_login');
+//Twitter OAuth
+Route::get('/twitter/redirect', function () {
+    return Socialite::driver('twitter')->redirect();
+});
 Route::get('/twitter/callback', [App\Http\Controllers\Auth\TwitterController::class, 'callback'])->name('twitter_callback');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('{any}', function () {
