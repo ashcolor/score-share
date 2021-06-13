@@ -14,8 +14,6 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Auth::routes();
-
 //Twitter OAuth
 Route::get('/twitter/redirect', function () {
     return Socialite::driver('twitter')->redirect();
