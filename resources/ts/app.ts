@@ -8,6 +8,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 
+axios.defaults.withCredentials = true;
+
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons)
 Vue.use(VueAxios, axios);

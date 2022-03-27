@@ -11,16 +11,20 @@
                     <b-nav-item v-b-toggle.score-table-each>マイ楽譜</b-nav-item>
                 </b-navbar-nav>
 
-                <b-navbar-nav class="ml-auto">
+                <b-navbar-nav class="ml-auto" v-if="user">
                     <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret right>
                         <template #button-content>
-                            <b-avatar class="mr-3"></b-avatar>
+                            <b-avatar class="mr-3" :src="user.twitter_profile_image_url_https"></b-avatar>
                         </template>
-                        <b-dropdown-item href="#">ログイン</b-dropdown-item>
+
                         <b-dropdown-item href="#">設定</b-dropdown-item>
                         <div class="dropdown-divider"></div>
-                        <b-dropdown-item href="#">ログアウト</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="onClickLogout">ログアウト</b-dropdown-item>
                     </b-dropdown>
+                </b-navbar-nav>
+                <b-navbar-nav class="ml-auto" v-else>
+                    <b-navbar-brand href="#" v-b-modal.login-modal>ログイン</b-navbar-brand>
+                    <LoginModal></LoginModal>
                 </b-navbar-nav>
 
             </b-collapse>
@@ -30,10 +34,33 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import LoginModal from '../organisms/LoginModal.vue'
+import axios from "axios";
 
-@Component
+@Component({
+    components: {LoginModal},
+})
 export default class CustomHeader extends Vue {
+    user = null
+    mounted(){
+        this.axios.get('/api/v1/user/self')
+            .then((response) => {
+                this.user = response.data
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
 
+    onClickLogout() {
+        this.axios.get('/api/v1/logout')
+            .then((response) => {
+                this.user = null
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
 }
 </script>
 

@@ -21,8 +21,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
+    Route::get('user/self', function (Request $request) {
+        return Auth::user();
+    });
+    Route::get('logout', function (Request $request) {
+        Auth::logout();
+    });
     Route::resources([
         'scores' => ScoreController::class,
         'want' => WantController::class,
     ]);
+});
+
+//ログインが必要なAPI
+Route::middleware('auth:sanctum')->group(function(){
+    //
 });
