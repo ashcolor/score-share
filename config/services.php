@@ -18,6 +18,7 @@ return [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
     ],
 
     'postmark' => [
@@ -30,9 +31,4 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'twitter' => [
-        'client_id' => env('TWITTER_API_KEY'),
-        'client_secret' => env('TWITTER_API_SECRET'),
-        'redirect' => env('TWITTER_CALLBACK_URL'),
-    ],
 ];
