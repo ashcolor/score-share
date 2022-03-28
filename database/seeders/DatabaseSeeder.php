@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Score;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        User::factory(30)->create();
+
+        $users = User::all();
+
+        Score::factory(300)
+            ->create()
+            ->each(function ($score) use ($users) {
+                $score->ownerships()->attach(
+                    $users->random(rand(0,10))->pluck('id')->toArray()
+                );
+                $score->wants()->attach(
+                    $users->random(rand(0,10))->pluck('id')->toArray()
+                );
+            });
     }
 }
